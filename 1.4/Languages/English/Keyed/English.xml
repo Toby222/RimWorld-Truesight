@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+    <Truesight.Truesight>Truesight</Truesight.Truesight>
+    <Truesight.SettingsCategory>Truesight</Truesight.SettingsCategory>
+    <Truesight.MaxLevelSource>Where to read the maximum level of Truesight from</Truesight.MaxLevelSource>
+    <Truesight.MaxLevelSource.Psylink>Same as Psylink</Truesight.MaxLevelSource.Psylink>
+    <Truesight.MaxLevelSource.Custom>Use a custom maximum level</Truesight.MaxLevelSource.Custom>
+    <Truesight.MaxLevel>Current effective maximum level</Truesight.MaxLevel>
+    <Truesight.MaxLevel.Custom>Custom maximum level</Truesight.MaxLevel.Custom>
+</LanguageData>

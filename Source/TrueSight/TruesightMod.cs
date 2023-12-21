@@ -1,39 +1,119 @@
 ﻿using HarmonyLib;
 using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 using Verse;
+using System.Reflection;
 
 namespace Truesight;
 
-[StaticConstructorOnStartup]
-public static class HarmonyPatches
+public class TruesightMod : Mod
 {
-    static HarmonyPatches()
+    public TruesightMod(ModContentPack content) : base(content)
     {
-        new Harmony("dev.toby.truesight").PatchAll();
+        ApplySettingsDelegate = () => ApplySettings();
+
+        Harmony harmony = new("dev.toby.truesight");
+        if (ModsConfig.IsActive("VanillaExpanded.VPsycastsE"))
+        {
+            var original = typeof(VanillaPsycastsExpanded.PsycastsMod).GetMethod(nameof(VanillaPsycastsExpanded.PsycastsMod.WriteSettings), BindingFlags.Public | BindingFlags.Instance);
+            var postfix = typeof(TruesightMod).GetMethod(nameof(ApplySettingsStatic), BindingFlags.NonPublic | BindingFlags.Static);
+            if (original is null) throw new NullReferenceException("original WriteSettings method is null");
+            if (postfix is null) throw new NullReferenceException("new ApplySettings method is null");
+            harmony.Patch(original, postfix: new HarmonyMethod(postfix));
+        }
+
+        harmony.PatchAll();
+        LongEventHandler.ExecuteWhenFinished(ApplySettings);
     }
 
-    public static bool ShouldGetTruesight(this Pawn pawn)
+    public override void WriteSettings()
     {
-        return !pawn.HasTruesight() && pawn.ShouldHaveTruesight();
+        base.WriteSettings();
+        ApplySettings();
     }
 
-    public static bool SightSourcesNonFunctional(this Pawn pawn)
+    public static float MaxLevel;
+
+    private static Delegate ApplySettingsDelegate;
+
+    private static void ApplySettingsStatic()
     {
-        List<BodyPartRecord> sightSourceParts = pawn.RaceProps.body.GetPartsWithTag(BodyPartTagDefOf.SightSource);
-        return sightSourceParts.All(part => PawnCapacityUtility.CalculatePartEfficiency(pawn.health.hediffSet, part) <= 0.0f);
+        ApplySettingsDelegate.DynamicInvoke();
     }
 
-    public static bool ShouldHaveTruesight(this Pawn pawn)
+    private void ApplySettings()
     {
-        return pawn is Pawn { Dead: false, Ideo: not null, health: not null }
-            && pawn.Ideo.IdeoApprovesOfBlindness()
-            && pawn.SightSourcesNonFunctional();
+        TruesightModSettings truesightModSettings = GetSettings<TruesightModSettings>();
+        MaxLevel = truesightModSettings.Source switch
+        {
+            TruesightModSettings.MaxLevelSource.Psylink when ModsConfig.IsActive("VanillaExpanded.VPsycastsE") => VanillaPsycastsExpanded.PsycastsMod.Settings.maxLevel,
+            // Fall back to Ideology if VPE not installed
+            TruesightModSettings.MaxLevelSource.Psylink => HediffDefOf.PsychicAmplifier.maxSeverity,
+            TruesightModSettings.MaxLevelSource.Custom => truesightModSettings.CustomLevel,
+
+            _ => throw new Exception("Unexpected value for TruesightModSettings.Source"),
+        };
+
+        if (Truesight_DefOf.Truesight.maxSeverity != MaxLevel)
+        {
+            Truesight_DefOf.Truesight.maxSeverity = MaxLevel;
+            TruesightHediffUtils.ClearHediffStageCache();
+            // TODO(Maybe) Update all hediffs to scale to new max level?
+        }
     }
 
-    public static bool HasTruesight(this Pawn pawn)
+    public override string SettingsCategory()
     {
-        return pawn.health.hediffSet.HasHediff(Truesight_DefOf.Truesight);
+        return "Truesight.SettingsCategory".Translate();
+    }
+
+    public override void DoSettingsWindowContents(Rect inRect)
+    {
+        base.DoSettingsWindowContents(inRect);
+        var settings = GetSettings<TruesightModSettings>();
+        Listing_Standard listing = new();
+        listing.Begin(inRect);
+        listing.LabelDouble("Truesight.MaxLevel".Translate(), Truesight_DefOf.Truesight.maxSeverity.ToString());
+        if (listing.ButtonTextLabeled("Truesight.MaxLevelSource".Translate(), $"Truesight.MaxLevelSource.{settings.Source}".Translate()))
+        {
+            Find.WindowStack.Add(new FloatMenu(
+                Enum.GetValues(typeof(TruesightModSettings.MaxLevelSource))
+              .Cast<TruesightModSettings.MaxLevelSource>()
+              .Select(source => new FloatMenuOption(source.ToString(), () =>
+              {
+                  GetSettings<TruesightModSettings>().Source = source;
+                  ApplySettings();
+              }))
+              .ToList()));
+        }
+        float textHeight = Text.CalcHeight("Truesight.MaxLevel.Custom".Translate(), listing.ColumnWidth / 2f);
+        var rect = listing.GetRect(textHeight);
+        Widgets.Label(rect.LeftHalf(), "Truesight.MaxLevel.Custom".Translate());
+        rect.height = 30f;
+        Widgets.IntEntry(rect.RightHalf(), ref settings.CustomLevel, ref TruesightModSettings.CustomLevelString);
+        listing.End();
+    }
+}
+
+public class TruesightModSettings : ModSettings
+{
+    public MaxLevelSource Source;
+    public int CustomLevel;
+    public static string CustomLevelString;
+
+    public enum MaxLevelSource
+    {
+        Psylink,
+        Custom,
+    }
+
+    public override void ExposeData()
+    {
+        base.ExposeData();
+        Scribe_Values.Look(ref Source, nameof(Source), MaxLevelSource.Psylink);
+        Scribe_Values.Look(ref CustomLevel, nameof(CustomLevel), 6);
     }
 }
