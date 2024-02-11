@@ -11,8 +11,7 @@ public static class GiveTruesightAfterBlinding
     {
         if (pawn.ShouldGetTruesight())
         {
-            Hediff hediff = HediffMaker.MakeHediff(Truesight_DefOf.Truesight, pawn);
-            pawn.health.AddHediff(hediff);
+            pawn.health.AddHediff(Truesight_DefOf.Truesight, pawn.health.hediffSet.GetBrain());
         }
     }
 }

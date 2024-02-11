@@ -10,8 +10,7 @@ public static class GiveTruesightOnPsylinkLevelChange
     {
         if (__instance.pawn.ShouldGetTruesight())
         {
-            Hediff hediff = HediffMaker.MakeHediff(Truesight_DefOf.Truesight, __instance.pawn);
-            __instance.pawn.health.AddHediff(hediff);
+            __instance.pawn.health.AddHediff(Truesight_DefOf.Truesight, __instance.pawn.health.hediffSet.GetBrain());
         }
     }
 }

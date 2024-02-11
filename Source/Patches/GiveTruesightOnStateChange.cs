@@ -10,8 +10,7 @@ public static class GiveTruesightOnStateChange
     {
         if (___pawn.ShouldGetTruesight())
         {
-            Hediff hediff = HediffMaker.MakeHediff(Truesight_DefOf.Truesight, ___pawn);
-            ___pawn.health.AddHediff(hediff);
+            ___pawn.health.AddHediff(Truesight_DefOf.Truesight, ___pawn.health.hediffSet.GetBrain());
         }
     }
 }

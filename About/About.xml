@@ -1,15 +1,21 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ModMetaData>
+  <packageId>dev.tobot.truesight</packageId>
   <name>Blindsight - Truesight</name>
   <authors>
-    <li>Lhoxris</li> <!-- Creator of original Truesight -->
-    <li>Chad Yu</li> <!-- Creator of the Spirit Sight mod, where I lifted some of the patches from -->
+    <li>Lhoxris</li>
+    <!-- Creator of original Truesight -->
+    <li>Chad Yu</li>
+    <!-- Creator of the Spirit Sight mod, where I lifted some of the patches from -->
     <li>Toby</li>
   </authors>
+  <description>Any pawns who follow the Blindsight precept who are incapable of natural sight will learn to utilize their psysense instead, allowing them to replace their sight with the powers of their psylink.\nPawn hearing is also increased as they adapt to their new sight.</description>
   <supportedVersions>
     <li>1.4</li>
   </supportedVersions>
-  <packageId>dev.tobot.truesight</packageId>
+  <!-- Gets automatically populated with VersionPrefix (see above) -->
+  <modVersion IgnoreIfNoMatchingField="True">2.1.0.0</modVersion>
+  <url>https://github.com/Toby222/RimWorld-Truesight</url>
   <modDependencies>
     <li>
       <packageId>brrainz.harmony</packageId>
@@ -17,7 +23,14 @@
       <steamWorkshopUrl>steam://url/CommunityFilePage/2009463077</steamWorkshopUrl>
       <downloadUrl>https://github.com/pardeike/HarmonyRimWorld/releases/latest</downloadUrl>
     </li>
+    <li>
+      <packageId>VanillaExpanded.VPsycastsE</packageId>
+      <displayName>Vanilla Psycasts Expanded</displayName>
+      <steamWorkshopUrl>steam://url/CommunityFilePage/2842502659</steamWorkshopUrl>
+      <downloadUrl>https://github.com/Vanilla-Expanded/VanillaPsycastsExpanded/archive/refs/heads/main.zip</downloadUrl>
+    </li>
   </modDependencies>
+  <modDependenciesByVersion/>
   <loadAfter>
     <li>brrainz.harmony</li>
     <li>Ludeon.RimWorld</li>
@@ -25,9 +38,14 @@
     <li>Ludeon.Rimworld.Ideology</li>
     <li>VanillaExpanded.VPsycastsE</li>
   </loadAfter>
+  <loadAfterByVersion/>
+  <forceLoadAfter/>
+  <loadBefore/>
+  <loadBeforeByVersion/>
+  <forceLoadBefore/>
   <incompatibleWith>
-    <li>Lhoxris.Truesight</li> <!-- original mod, not compatible because of overlapping code -->
+    <!-- original mod, not compatible because of overlapping code -->
+    <li>Lhoxris.Truesight</li>
   </incompatibleWith>
-  <description>Any pawns who follow the Blindsight precept who are incapable of natural sight will learn to utilize their psysense instead, allowing them to replace their sight with the powers of their psylink.
-    Pawn hearing is also increased as they adapt to their new sight.</description>
+  <incompatibleWithByVersion/>
 </ModMetaData>

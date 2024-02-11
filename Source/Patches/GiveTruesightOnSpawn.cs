@@ -10,8 +10,7 @@ public static class GiveTruesightOnSpawn
     {
         if (__instance.ShouldGetTruesight())
         {
-            Hediff hediff = HediffMaker.MakeHediff(Truesight_DefOf.Truesight, __instance);
-            __instance.health.AddHediff(hediff);
+            __instance.health.AddHediff(Truesight_DefOf.Truesight, __instance.health.hediffSet.GetBrain());
         }
     }
 }

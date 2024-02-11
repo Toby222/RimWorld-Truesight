@@ -1,4 +1,4 @@
 [submodule "VanillaPsycastsExpanded.git"]
-	path = Source/VanillaPsycastsExpanded
+	path = Third-Party/VanillaPsycastsExpanded
 	url = https://github.com/Vanilla-Expanded/VanillaPsycastsExpanded.git
 	branch = main
