@@ -10,7 +10,10 @@ public static class GiveTruesightOnSpawn
     {
         if (__instance.ShouldGetTruesight())
         {
-            __instance.health.AddHediff(Truesight_DefOf.Truesight, __instance.health.hediffSet.GetBrain());
+            __instance.health.AddHediff(
+                Truesight_DefOf.Truesight,
+                __instance.health.hediffSet.GetBrain()
+            );
         }
     }
 }

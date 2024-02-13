@@ -12,7 +12,10 @@ public static class GiveTruesightToBlindedConvertees
     {
         if (___pawn.ShouldGetTruesight())
         {
-            ___pawn.health.AddHediff(Truesight_DefOf.Truesight, ___pawn.health.hediffSet.GetBrain());
+            ___pawn.health.AddHediff(
+                Truesight_DefOf.Truesight,
+                ___pawn.health.hediffSet.GetBrain()
+            );
         }
     }
 }

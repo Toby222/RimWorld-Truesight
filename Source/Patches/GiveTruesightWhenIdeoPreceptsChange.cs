@@ -10,7 +10,8 @@ public static class GiveTruesightWhenIdeoPreceptsChange
 {
     public static void Postfix(Ideo __instance)
     {
-        if (!__instance.IdeoApprovesOfBlindness()) return;
+        if (!__instance.IdeoApprovesOfBlindness())
+            return;
 
         foreach (Pawn pawn in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive)
         {

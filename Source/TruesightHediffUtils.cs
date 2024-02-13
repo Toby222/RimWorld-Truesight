@@ -1,6 +1,6 @@
-﻿using RimWorld;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using RimWorld;
 using UnityEngine;
 using Verse;
 
@@ -15,8 +15,12 @@ public static class TruesightHediffUtils
 
     public static bool SightSourcesNonFunctional(this Pawn pawn)
     {
-        List<BodyPartRecord> sightSourceParts = pawn.RaceProps.body.GetPartsWithTag(BodyPartTagDefOf.SightSource);
-        return sightSourceParts.All(part => PawnCapacityUtility.CalculatePartEfficiency(pawn.health.hediffSet, part) <= 0.0f);
+        List<BodyPartRecord> sightSourceParts = pawn.RaceProps.body.GetPartsWithTag(
+            BodyPartTagDefOf.SightSource
+        );
+        return sightSourceParts.All(part =>
+            PawnCapacityUtility.CalculatePartEfficiency(pawn.health.hediffSet, part) <= 0.0f
+        );
     }
 
     public static bool ShouldHaveTruesight(this Pawn pawn)
@@ -54,11 +58,21 @@ public static class TruesightHediffUtils
     {
         return new()
         {
-            capMods = new() {
-                new () { capacity = PawnCapacityDefOf.Hearing, offset = Mathf.Lerp(0.0f, 0.5f, severity / TruesightMod.MaxLevel) },
-                new () { capacity = PawnCapacityDefOf.Sight, offset = Mathf.Lerp(-1.0f, 0.5f, severity / TruesightMod.MaxLevel) },
+            capMods = new()
+            {
+                new()
+                {
+                    capacity = PawnCapacityDefOf.Hearing,
+                    offset = Mathf.Lerp(0.0f, 0.5f, severity / TruesightMod.MaxLevel)
+                },
+                new()
+                {
+                    capacity = PawnCapacityDefOf.Sight,
+                    offset = Mathf.Lerp(-1.0f, 0.5f, severity / TruesightMod.MaxLevel)
+                },
             },
-            overrideTooltip = "This person has successfully completed the ritual of Truesight and is now on their way to unlocking their true vision. Acquire psylink levels to improve their stats.",
+            overrideTooltip =
+                "This person has successfully completed the ritual of Truesight and is now on their way to unlocking their true vision. Acquire psylink levels to improve their stats.",
         };
     }
 }

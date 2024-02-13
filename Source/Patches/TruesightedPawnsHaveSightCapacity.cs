@@ -4,7 +4,10 @@ using Verse;
 
 namespace Truesight.Patches;
 
-[HarmonyPatch(typeof(PawnCapacityWorker_Sight), nameof(PawnCapacityWorker_Sight.CalculateCapacityLevel))]
+[HarmonyPatch(
+    typeof(PawnCapacityWorker_Sight),
+    nameof(PawnCapacityWorker_Sight.CalculateCapacityLevel)
+)]
 public static class TruesightedPawnsHaveSightCapacity
 {
     [HarmonyPostfix]

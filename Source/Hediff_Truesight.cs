@@ -26,9 +26,7 @@ public class Hediff_Truesight : Hediff_Level
 
     public void UpdateLevel()
     {
-        SetLevelTo(pawn.HasPsylink
-            ? pawn.GetPsylinkLevel()
-            : 0);
+        SetLevelTo(pawn.HasPsylink ? pawn.GetPsylinkLevel() : 0);
     }
 
     public override HediffStage CurStage => TruesightHediffUtils.GetHediffStage((int)severityInt);
